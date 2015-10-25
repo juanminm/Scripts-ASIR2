@@ -14,7 +14,7 @@ done
 ## Mostrar el valor en bytes.
 echo "Total de bytes respaldados: $TOTAL"
 ## Mostrar el valor en Megabytes binarios o Mebibytes (MiB).
-echo "Total de Megabytes respaldados: `expr $TOTAL / 1024**2`MiB"
+echo "Total de Mebibytes respaldados: `expr $TOTAL / 1024**2`MiB"
 ## Mostrar el valor en Gigabytes binarios o Gibibytes (GiB).
-echo "Total de Gigabytes respaldados: `expr $TOTAL / 1024**3`GiB"
+echo "Total de Gibibytes respaldados: `expr $TOTAL / 1024**3`GiB"
 
