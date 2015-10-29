@@ -22,15 +22,33 @@ case $OPCION in
 		if [ ! "$INVALIDO" = '' ]; then
 			echo Las siguientes rutas no existen o son invalidas:
 			for OMITIDO in $INVALIDO; do
-				echo "\ \ $OMITIDO"
+				echo "  $OMITIDO"
 				ARCHIVOS=`echo "$ARCHIVOS" | sed "s/$OMITIDO//g"`
 			done
-			echo "\nSe omitirán."
+			echo "Se omitirán."
 		fi
 		echo $ARCHIVOS
-
+		read -p "Escoge el tipo de compresión [gz, gzip]:" COMPRESION
+		case $COMPRESION in
+			lz|lzip)
+				TIPOCOMP="lzip"
+				EXTCOMP="tar.lz"
+				;;
+			xz)
+				TIPOCOMP="xz"
+				EXTCOMP="tar.xz"
+				;;
+			bz2|bzip2)
+				TIPOCOMP="bzip2"
+				EXTCOMP="tar.bz2"
+				;;
+			gz|gzip|gunzip|ungzip|"")
+				TIPOCOMP="gzip"
+				EXTCOMP="tar.gz"
+				;;
+		esac
 		read -p "Introduzca el nombre del contenedor: " CONTENEDOR
-		tar -zvcf $CONTENEDOR $ARCHIVOS
+		tar --${TIPOCOMP} -vcf ${CONTENEDOR}.${EXTCOMP} $ARCHIVOS
 		;;
 	2)
 		read -p "Introduzca la ruta del archivo a descomprimir:" CONTENEDOR
