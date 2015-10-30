@@ -1,45 +1,49 @@
 #!/bin/bash
 
-clear
-echo "-------------------------"
-echo "|    Script compresor   |"
-echo "-------------------------"
-echo "1. Comprimir"
-echo "2. Descomprimir"
-echo "3. Salir"
+menu(
+	OPCION=(zenity --list --title="Comprimidor" --radiolist --column="Acción" comprimir descomprimir salir)
+	opciones
+)
 
-read -p "Selecciona una opción: " OPCION
+opciones{
+	case $OPCION in
+		1)
+			ARCHIVOS=$(zenity --file-selection --multiple --separator=' ' --title="Selecciona los archivos para comprimir")
+			COMPRESION=$(zenity --list --title="Seleccione el tipo de compresión" --radiolist --column="Formato" gzip bzip2 lzip xz)
+			case $COMPRESION in
+				lzip)
+					TIPOCOMP="lzip"
+					EXTCOMP=".tar.lz"
+					;;
+				xz)
+					TIPOCOMP="xz"
+					EXTCOMP=".tar.xz"
+					;;
+				bzip2)
+					TIPOCOMP="bzip2"
+					EXTCOMP=".tar.bz2"
+					;;
+				gzip)
+					TIPOCOMP="gzip"
+					EXTCOMP=".tar.gz"
+					;;
+			esac
+			CONTENEDOR=$(zenity --file-selection --save --confirm-overwrite --filename="$EXTCOMP" --title="Seleccione el directorio donde guardar: ")
+			tar -vc --${TIPOCOMP} -C $PWD -f ${CONTENEDOR} $ARCHIVOS
+			menu
+			;;
+		2)
+			CONTENEDOR=$(zenity --file-selection --title "Seleccione el archivo a descomprimir")
+			RUTA=$(zenity -file-selection --directory --title="Seleccione el directorio donde descomprimir")
+			tar -xv -C $RUTA -f $CONTENEDOR
+			read -p "El archivo `basename $CONTENEDOR` ha sido creado. Pulse ENTER para continuar..."
+		menu
+			;;
+		3)
+			echo "Saliendo del programa..."
+			exit
+			;;
+	esac
+}
 
-case $OPCION in
-	1)
-		read -p "Introduzca las rutas de los archivo que quieres comprimir:" ARCHIVOS
-		echo $ARCHIVOS
-		for TEST in $ARCHIVOS; do
-			if [ ! -f $TEST ]; then
-				INVALIDO="$INVALIDO $TEST"
-			fi
-		done
-		if [ ! "$INVALIDO" = '' ]; then
-			echo Las siguientes rutas no existen o son invalidas:
-			for OMITIDO in $INVALIDO; do
-				echo "\ \ $OMITIDO"
-				ARCHIVOS=`echo "$ARCHIVOS" | sed "s/$OMITIDO//g"`
-			done
-			echo "\nSe omitirán."
-		fi
-		echo $ARCHIVOS
-		read -p "Escoge el tipo de compresión (gz, bz, lz, xz) [gz]:" TIPOCOMPRESION
-
-		read -p "Introduzca el nombre del contenedor: " CONTENEDOR
-		tar -zvcf $CONTENEDOR $ARCHIVOS
-		;;
-	2)
-		read -p "Introduzca la ruta del archivo a descomprimir:" CONTENEDOR
-		read -p "¿Dónde desea descomprimirlo?:" RUTA
-		tar -C $RUTA -xvf $CONTENEDOR
-		;;
-	3)
-		echo "Saliendo del programa..."
-		exit
-		;;
-esac
+menu
