@@ -1,20 +1,16 @@
 #!/bin/bash
 
-menu(
-	OPCION=(zenity --list --title="Comprimidor" --radiolist --column="Acción" comprimir descomprimir salir)
+menu(){
+	OPCION=$(zenity --list --title="Comprimidor" --radiolist --column="" --column="Acción" "" "Comprimir" "" "Descomprimir" "" "Salir")
 	opciones
-)
+}
 
-opciones{
+opciones(){
 	case $OPCION in
-		1)
+		"Comprimir")
 			ARCHIVOS=$(zenity --file-selection --multiple --separator=' ' --title="Selecciona los archivos para comprimir")
-			COMPRESION=$(zenity --list --title="Seleccione el tipo de compresión" --radiolist --column="Formato" gzip bzip2 lzip xz)
+			COMPRESION=$(zenity --list --title="Seleccione el tipo de compresión" --radiolist --column="" --column="Formato" "" gzip "" bzip2 "" xz)
 			case $COMPRESION in
-				lzip)
-					TIPOCOMP="lzip"
-					EXTCOMP=".tar.lz"
-					;;
 				xz)
 					TIPOCOMP="xz"
 					EXTCOMP=".tar.xz"
@@ -29,17 +25,18 @@ opciones{
 					;;
 			esac
 			CONTENEDOR=$(zenity --file-selection --save --confirm-overwrite --filename="$EXTCOMP" --title="Seleccione el directorio donde guardar: ")
-			tar -vc --${TIPOCOMP} -C $PWD -f ${CONTENEDOR} $ARCHIVOS
+			tar -vc --${TIPOCOMP} -f ${CONTENEDOR} $ARCHIVOS
+			zenity --info --text="El archivo `basename $CONTENEDOR` ha sido creado."
 			menu
 			;;
-		2)
+		"Descomprimir")
 			CONTENEDOR=$(zenity --file-selection --title "Seleccione el archivo a descomprimir")
-			RUTA=$(zenity -file-selection --directory --title="Seleccione el directorio donde descomprimir")
+			RUTA=$(zenity --file-selection --directory --title="Seleccione el directorio donde descomprimir")
 			tar -xv -C $RUTA -f $CONTENEDOR
-			read -p "El archivo `basename $CONTENEDOR` ha sido creado. Pulse ENTER para continuar..."
+			zenity --info --text "El archivo `basename $CONTENEDOR` ha sido descomprimido."
 		menu
 			;;
-		3)
+		"Salir")
 			echo "Saliendo del programa..."
 			exit
 			;;

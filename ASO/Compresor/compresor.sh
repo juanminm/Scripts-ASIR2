@@ -17,7 +17,6 @@ opciones(){
 	case $OPCION in
 		1)
 			read -p "Introduzca las rutas de los archivo que quieres comprimir:" ARCHIVOS
-			echo $ARCHIVOS
 			for TEST in $ARCHIVOS; do
 				if [ ! -f $TEST ]; then
 					INVALIDO="$INVALIDO $TEST"
@@ -31,13 +30,13 @@ opciones(){
 				done
 				echo "Se omitirán."
 			fi
-			echo $ARCHIVOS
-			read -p "Escoge el tipo de compresión [gz, gzip]:" COMPRESION
+			echo "Lo siguientes formatos son soportados:"
+			echo "* Gunzip: gz, gzip, gunzip"
+			echo "* Bzip2: bz2, bzip2"
+			echo "* XZ: xz"
+			echo ""
+			read -p "Escoge el tipo de compresión [gzip]:" COMPRESION
 			case $COMPRESION in
-				lz|lzip)
-					TIPOCOMP="lzip"
-					EXTCOMP="tar.lz"
-					;;
 				xz)
 					TIPOCOMP="xz"
 					EXTCOMP="tar.xz"
