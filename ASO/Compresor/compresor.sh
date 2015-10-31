@@ -67,7 +67,7 @@ opciones(){
 			exit
 			;;
 		*)
-			menu;
+			menu;;
 	esac
 }
 
