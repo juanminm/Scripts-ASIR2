@@ -13,6 +13,25 @@ menu(){
 	opciones
 }
 
+ruta(){
+	directorio
+	while [ ! -d $RUTA ]; do
+		echo "El nombre de directorio no existe o es invalido."
+		directorio
+	done
+}
+
+directorio(){
+	if [ $OPCION = 1 ]; then
+		read -p "Introduzca la ruta donde guardar el contenedor: " RUTA
+	elfi [ $OPCION = 2 ]
+		read -p "Introduzca la ruta donde descomprimir el contenedor: " RUTA
+	fi
+	if [ "`echo "$RUTA" | grep "\/$"`" = "" ]; then
+		RUTA="${RUTA}/"
+	fi
+}
+
 opciones(){
 	case $OPCION in
 		1)
@@ -51,13 +70,14 @@ opciones(){
 					;;
 			esac
 			read -p "Introduzca el nombre del contenedor: " CONTENEDOR
-			tar -vc --${TIPOCOMP} -f ${CONTENEDOR}.${EXTCOMP} $ARCHIVOS
+			ruta
+			tar -vc --${TIPOCOMP} -f ${RUTA}${CONTENEDOR}.${EXTCOMP} $ARCHIVOS
 			read -p "El archivo ${CONTENEDOR}.${EXTCOMP} ha sido creado. Pulse ENTER para continuar..."
 			menu;
 			;;
 		2)
 			read -p "Introduzca la ruta del archivo a descomprimir:" CONTENEDOR
-			read -p "¿Dónde desea descomprimirlo?:" RUTA
+			ruta
 			tar -C $RUTA -xvf $CONTENEDOR
 			read -p "El archivo `basename $CONTENEDOR` ha sido creado. Pulse ENTER para continuar..."
 			menu;
