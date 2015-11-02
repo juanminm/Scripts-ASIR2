@@ -10,5 +10,6 @@ case $1 in
 		echo "     stop:  Restablece la configuración por defecto"
 		echo "     save:  Guarda la configuración"
 		echo "     help:  Muestra la ayuda"
+		;;
 esac
 
