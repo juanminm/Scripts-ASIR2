@@ -73,14 +73,14 @@ opciones(){
 			ruta
 			tar -vc --${TIPOCOMP} -f ${RUTA}${CONTENEDOR}.${EXTCOMP} $ARCHIVOS
 			read -p "El archivo ${CONTENEDOR}.${EXTCOMP} ha sido creado. Pulse ENTER para continuar..."
-			menu;
+			menu
 			;;
 		2)
 			read -p "Introduzca la ruta del archivo a descomprimir:" CONTENEDOR
 			ruta
 			tar -C $RUTA -xvf $CONTENEDOR
 			read -p "El archivo `basename $CONTENEDOR` ha sido creado. Pulse ENTER para continuar..."
-			menu;
+			menu
 			;;
 		3)
 			echo "Saliendo del programa..."
