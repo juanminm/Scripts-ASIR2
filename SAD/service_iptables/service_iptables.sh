@@ -1,16 +1,22 @@
-#!/bin/bash
+#!/bin/sh
+
+IPTABLES_ROOT_CONFDIR="/root/.iptables"
+
+if [ ! -d $IPTABLES_ROOT_CONFDIR ]; then
+	mkdir $IPTABLES_ROOT_CONFDIR
+fi
 
 case "$1" in
 	stop)
-		iptables-restore < iptables.default
+		iptables-restore < $IPTABLES_ROOT_CONFDIR/iptables.default
 		echo "Restored default configuration."
 		;;
 	start)
-		iptables-restore < iptables.conf
+		iptables-restore < $IPTABLES_ROOT_CONFDIR/iptables.conf
 		echo "Loaded custom configuration."
 		;;
 	save)
-		iptables-save > iptables.conf
+		iptables-save > $IPTABLES_ROOT_CONFDIR/iptables.conf
 		echo "Saved custom configuration."
 		;;
 	*)
