@@ -12,4 +12,5 @@ echo $PATH | grep -q $DIRSCRIPT
 if [ $? = 1 ]
 then
     PATH ="${DIRSCRIPT}:$PATH"
+    export $PATH
 fi
