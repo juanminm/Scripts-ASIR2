@@ -2,8 +2,8 @@
 
 ### BEGIN INIT INFO
 # Provides:          custom-iptables
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
 # Should-Start:      $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      1 6 0
@@ -13,9 +13,15 @@
 #                    as well as saving the custom configuration.
 ### END INIT INFO
 
+NAME=`basename $0`
+PID_FILE="/var/run/$NAME.pid"
 CONFDIR="/etc/custom-iptables"
 CUSTOMCONF="$CONFDIR/iptables.conf"
 DEFAULTCONF="$CONFDIR/iptables.default.conf"
+
+is_running(){
+	[ -f $PID_FILE ]
+}
 
 checkconfdir(){
 	if [ ! -d $CONFDIR ]; then
@@ -41,25 +47,51 @@ EOF
 
 case "$1" in
 	start)
-		checkconfdir
-		if [ -f $CUSTOMCONF ]; then
-			iptables-restore < $CUSTOMCONF
-			echo "Loaded custom configuration."
+		if is_running; then
+			echo "Already loaded."
 		else
-			echo "There is no custom configuration."
+			echo -n "Loading custom configuration..."
+			checkconfdir
+
+			if [ -f $CUSTOMCONF ]; then
+				iptables-restore < $CUSTOMCONF
+				echo "Loaded"
+			else
+				echo "There is no custom configuration."
+				exit 1
+			fi
 		fi
 		;;
 	stop)
-		checkconfdir
-		if [ ! -f $DEFAULTCONF ]; then
-			iptables_defaultconf > $DEFAULTCONF
+		if is_running; then
+			echo -n "Restoring default rules..."
+			checkconfdir
+
+			if [ ! -f $DEFAULTCONF ]; then
+				defaultconf > $DEFAULTCONF
+			fi
+
+			iptables-restore < $DEFAULTCONF
+			echo "Restored."
+
+			if [ -f "$PID_FILE" ]; then
+				rm "$PID_FILE"
+			fi
+		else
+			echo "Not running"
 		fi
-		iptables-restore < $DEFAULTCONF
-		echo "Restored default configuration."
 		;;
 	restart)
 		$0 stop
 		$0 start
+		;;
+	status)
+		if is_running; then
+			echo "Running"
+		else
+			echo "Stopped"
+			exit 1
+		fi
 		;;
 	save)
 		checkconfdir
