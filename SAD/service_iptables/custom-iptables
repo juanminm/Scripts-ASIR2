@@ -1,0 +1,75 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          custom-iptables
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      1 6 0
+# Short-Description: iptables rules saver and loader
+# Description:       custom-iptables is a program that permits the restoration
+#                    of custom and default iptables configuration files, as
+#                    as well as saving the custom configuration.
+### END INIT INFO
+
+CONFDIR="/etc/custom-iptables"
+CUSTOMCONF="$CONFDIR/iptables.conf"
+DEFAULTCONF="$CONFDIR/iptables.default.conf"
+
+checkconfdir(){
+	if [ ! -d $CONFDIR ]; then
+		mkdir $CONFDIR
+	fi
+}
+
+defaultconf(){
+	cat << EOF
+*filter
+:INPUT ACCEPT [324:21052]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [235:25696]
+COMMIT
+*nat
+:PREROUTING ACCEPT [3:396]
+:INPUT ACCEPT [3:396]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+COMMIT
+EOF
+}
+
+case "$1" in
+	start)
+		checkconfdir
+		if [ -f $CUSTOMCONF ]; then
+			iptables-restore < $CUSTOMCONF
+			echo "Loaded custom configuration."
+		else
+			echo "There is no custom configuration."
+		fi
+		;;
+	stop)
+		checkconfdir
+		if [ ! -f $DEFAULTCONF ]; then
+			iptables_defaultconf > $DEFAULTCONF
+		fi
+		iptables-restore < $DEFAULTCONF
+		echo "Restored default configuration."
+		;;
+	restart)
+		$0 stop
+		$0 start
+		;;
+	save)
+		checkconfdir
+		iptables-save > $CUSTOMCONF
+		echo "Saved custom configuration."
+		;;
+	*)
+		echo "Usage: /etc/init.d/custom-iptables {start|stop|restart|save}"
+		exit 1
+		;;
+esac
+
+exit 0
