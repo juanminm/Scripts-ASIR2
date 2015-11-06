@@ -4,7 +4,6 @@
 # Provides:          custom-iptables
 # Required-Start:    $local_fs
 # Required-Stop:     $local_fs
-# Should-Start:      $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      1 6 0
 # Short-Description: iptables rules saver and loader
