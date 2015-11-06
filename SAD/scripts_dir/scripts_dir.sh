@@ -1,16 +1,14 @@
-#!/bin/sh
+#!/bin/bash
+# This script will create the folder "scripts" in the home of the user and will
+# add it to the PATH environment variable.
 
-## You must add this part at the end of your ~/.bashrc file to create a directory called "scripts"
-## and add it to the PATH environment variable.
+SCRIPTSDIR="$HOME/scripts"
 
-if [ ! -d $HOME/scripts ]; then
-    mkdir $HOME/scripts
+if [ ! -d $SCRIPTSDIR ]; then
+    mkdir $SCRIPTSDIR
 fi
 
-DIRSCRIPT=`echo $(cd $HOME/scripts && pwd -P)`
-echo $PATH | grep -q $DIRSCRIPT
-if [ $? = 1 ]
-then
-    PATH ="${DIRSCRIPT}:$PATH"
-    export $PATH
+if [ ! `echo $PATH | grep $SCRIPTSDIR` ]; then
+    PATH="${SCRIPTSDIR}:$PATH"
+    export PATH
 fi
