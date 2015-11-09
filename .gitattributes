@@ -1,0 +1,13 @@
+* text=auto
+
+*.gitattributes text
+*.md text
+*.sh text eol=lf
+*.ash text eol=lf
+*.bash text eol=lf
+*.csh text eol=lf
+*.dash text eol=lf
+*.ksh text eol=lf
+*.zsh text eol=lf
+
+custom-iptables text eol=lf
