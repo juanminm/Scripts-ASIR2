@@ -55,6 +55,7 @@ case "$1" in
 			if [ -f $CUSTOMCONF ]; then
 				iptables-restore < $CUSTOMCONF
 				echo "Loaded"
+				echo $! > $PID_FILE
 			else
 				echo "There is no custom configuration."
 				exit 1
