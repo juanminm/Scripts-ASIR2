@@ -99,7 +99,7 @@ case "$1" in
 		echo "Saved custom configuration."
 		;;
 	*)
-		echo "Usage: /etc/init.d/custom-iptables {start|stop|restart|save}"
+		echo "Usage: /etc/init.d/custom-iptables {start|stop|restart|status|save}"
 		exit 1
 		;;
 esac
