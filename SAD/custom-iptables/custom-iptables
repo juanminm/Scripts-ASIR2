@@ -2,8 +2,8 @@
 
 ### BEGIN INIT INFO
 # Provides:          custom-iptables
-# Required-Start:    $local_fs
-# Required-Stop:     $local_fs
+# Required-Start:    $all
+# Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      1 6 0
 # Short-Description: iptables rules saver and loader
@@ -31,15 +31,15 @@ checkconfdir(){
 defaultconf(){
 	cat << EOF
 *filter
-:INPUT ACCEPT [324:21052]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [235:25696]
+:INPUT ACCEPT
+:FORWARD ACCEPT
+:OUTPUT ACCEPT
 COMMIT
 *nat
-:PREROUTING ACCEPT [3:396]
-:INPUT ACCEPT [3:396]
-:OUTPUT ACCEPT [0:0]
-:POSTROUTING ACCEPT [0:0]
+:PREROUTING ACCEPT
+:INPUT ACCEPT
+:OUTPUT ACCEPT
+:POSTROUTING ACCEPT
 COMMIT
 EOF
 }
