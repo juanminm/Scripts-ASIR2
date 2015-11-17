@@ -1,4 +1,4 @@
-# services_iptables.sh
+# custom-iptables
 
 This script will save, restore current rules and restore default rules.
 
