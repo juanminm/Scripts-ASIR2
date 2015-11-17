@@ -22,7 +22,7 @@ ALTER TABLE `Provincias`
     ADD PRIMARY KEY (`id`);
 
 /* Ejercicio 5. Crear la tabla sectores ¿Cómo creamos la clave principal?*/
-DROP TABLE IF EXISTS `Provincias`;
+DROP TABLE IF EXISTS `Sectores`;
 
 CREATE TABLE IF NOT EXISTS `Sectores` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -147,7 +147,7 @@ UPDATE `Provincias`
 
 /* Ejercicio 9. Crear las claves ajenas. ¿Que hacemos con la provincia
 nacional? */
-ALTER TABLE `Provincia` ADD
+ALTER TABLE `Provincias` ADD
     CONSTRAINT `fk_provincia_autonomias`
     FOREIGN KEY (`autonomia`)
     REFERENCES `Autonomias` (`id`);
@@ -178,7 +178,7 @@ SELECT p.`nombre` AS "Provincia", vim.`valor` AS "Variación de IPC"
         AND (
             vim.`anyo` = '2015'
             OR (vim.`anyo` = '2014'
-                AND vim.`mes`>='3'
+                AND vim.`mes`>='10'
             )
         )
     GROUP BY 1;
@@ -215,7 +215,7 @@ CREATE VIEW `ipc_interanual_ca` AS
                 vim.`anyo` = '2015'
                 OR (
                     vim.`anyo` = '2014'
-                    AND vim.`mes`>='3'
+                    AND vim.`mes`>='10'
                 )
             )
         GROUP BY 1;
