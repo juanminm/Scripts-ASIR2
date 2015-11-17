@@ -152,13 +152,13 @@ ALTER TABLE `Provincias` ADD
     FOREIGN KEY (`autonomia`)
     REFERENCES `Autonomias` (`id`);
 
-ALTER TABLE `var_ipc_mes` ADD
-    CONSTRAINT `fk_varipcmes_provincia`
-    FOREIGN KEY (`provincia`)
-    REFERENCES `Provincias` (`id`),
-    CONSTRAINT `fk_varipcmes_sectores`
-    FOREIGN KEY (`sector`)
-    REFERENCES `Sectores` (`id`);
+ALTER TABLE `var_ipc_mes`
+    ADD CONSTRAINT `fk_varipcmes_provincia`
+        FOREIGN KEY (`provincia`)
+        REFERENCES `Provincias` (`id`),
+    ADD CONSTRAINT `fk_varipcmes_sectores`
+        FOREIGN KEY (`sector`)
+        REFERENCES `Sectores` (`id`);
 
 /* Ejercicio 10. Crear un vista, ipc_acumulado, que muestre cuanto ha variado
 el IPC el año actual por provincias. */
