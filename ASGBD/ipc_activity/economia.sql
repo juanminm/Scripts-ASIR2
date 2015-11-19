@@ -163,7 +163,7 @@ ALTER TABLE `var_ipc_mes`
 /* Ejercicio 10. Crear un vista, ipc_acumulado, que muestre cuanto ha variado
 el IPC el año actual por provincias. */
 CREATE VIEW `ipc_acumulado` AS
-    SELECT p.`nombre` AS "Provincia", vim.`valor` AS "Variación de IPC"
+    SELECT p.`nombre` AS "Provincia", ROUND(SUM(vim.`valor`),3) AS "Variación de IPC"
         FROM `Provincias` p, `var_ipc_mes` vim
         WHERE p.`id` = vim.`provincia`
             AND vim.`anyo` = '2015'
@@ -172,7 +172,7 @@ CREATE VIEW `ipc_acumulado` AS
 /* Ejercicio 11. Crear una vista, ipc_interanual, que muestre cuanto ha variado
 el IPC en los 12 últimos meses por provincias. */
 CREATE VIEW `ipc_interanual` AS
-SELECT p.`nombre` AS "Provincia", vim.`valor` AS "Variación de IPC"
+SELECT p.`nombre` AS "Provincia", ROUND(SUM(vim.`valor`),3) AS "Variación de IPC"
     FROM `Provincias` p, `var_ipc_mes` vim
     WHERE p.`id` = vim.`provincia`
         AND (
