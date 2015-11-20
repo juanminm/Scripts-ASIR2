@@ -50,5 +50,12 @@
             <input type="submit" name="submit" value="Enviar" />
         </form>
         <?php } ?>
+        <div id="error">
+            <?php
+                if(isset($_REQUEST["submit"]) && !isset($_REQUEST["gender"])){
+                    echo "No has seleccionado ninguna opción.";
+                }
+            ?>
+        </div>
     </body>
 </html>
