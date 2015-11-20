@@ -11,6 +11,16 @@
         </style>
     </head>
     <body>
+        <?php 
+            if(isset($_REQUEST["submit"])){
+                if(isset($_REQUEST["feet"]) && isset($_REQUEST["inches"])){
+                    $feet=$_REQUEST["feet"];
+                    $inches=$_REQUEST["inches"];
+                    
+                    $centimetres=($inches+($feet*12))*2.54;
+                } 
+            }
+         ?>
         <h2>Conversión de pies y pulgadas a metros</h2>
         <form action="ejercicio2.3.php" method="post">
             <table>
@@ -27,13 +37,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><strong>Metros</strong></td>
+                    <td><strong>Centimetros</strong></td>
                     <td>
-                        <input type="text" name="metres" readonly="readonly" value="" />
+                        <input type="text" name="metres" readonly="readonly" value="
+                            <?php
+                            if(isset($_REQUEST["submit"])){
+                                echo $centimetres;
+                            }
+                            ?>
+                        " />
                     </td>
                 </tr>
             </table>
-            <input type="sumbit" name="submit" value="Enviar" />
+            <input type="submit" name="submit" value="Enviar" />
         </form>
     </body>
 </html>
