@@ -1,56 +1,67 @@
-<?php
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Configuración de usuario</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <?php
+        require('credentials.php');
+        $conexion= new mysqli($dbConn['host'],$dbConn['user'],$dbConn['pass'],$dbConn['database']);
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+        if($conexion->connect_errno){
+            die("Error de conexión: ".$conexion->connect_error);
+        }
 
-$conexion= new mysqli("localhost","root","ausias","gestion");
+        $conexion->set_charset("utf8");
 
-if($conexion->connect_errno){
-    die("Error de conexión: ".$conexion->connect_error);
-}
+        $username=$conexion->real_escape_string($_POST["username"]);
+        $password=$conexion->real_escape_string($_POST["password"]);
 
-$username=$conexion->real_escape_string($_POST["username"]);
-$password=$conexion->real_escape_string($_POST["password"]);
+        $sql = "SELECT * "
+                . "FROM `clientes` "
+                . "WHERE `username`='$username' "
+                . "AND `password`=SHA2('$password',512)";
 
-$sql = "SELECT * "
-        . "FROM `clientes` "
-        . "WHERE `username`='$username' "
-        . "AND `password`=SHA2('$password',512)";
+        $resultado=$conexion->query($sql);
+        
+        $row=$resultado->fetch_assoc();
 
-echo $sql."<br/>";
-
-$resultado=$conexion->query($sql);
-
-if($resultado->num_rows==1){ ?>
-<form action="guardar.php" method="post">
-    <table>
-        <tr>
-            <td>Nombre</td>
-            <td><input type="text" name="fullname" /></td>
-        </tr>
-        <tr>
-            <td>Edad</td>
-            <td><input type="text" name="age"/></td>
-        </tr>
-        <tr>
-            <td>Curso Actual</td>
-            <td><input type="text" name="year"/></td>
-        </tr>
-        <tr>
-            <td>Usuario</td>
-            <td><input type="text" name="username"/></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" name="submit" value="sumbit"></td>
-        </tr>
-    </table>
-</form>
-<?php
-} else {
-    header("Location: http://172.20.111.3/php/login/valida.html");
-    exit();
-}
-?>
+        if($resultado->num_rows==1){ ?>
+        <form action="guardar.php" method="post">
+            <table>
+                <tr>
+                    <td>NIF</td>
+                    <td><input type="text" name="nif" value="<?php echo $row["nif"] ?>" /></td>
+                </tr>
+                <tr>
+                    <td>Nombre</td>
+                    <td><input type="text" name="nombre" value="<?php echo $row["nombre"] ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Primer apellido</td>
+                    <td><input type="text" name="apellido1" value="<?php echo $row["apellido1"] ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Segundo apellido</td>
+                    <td><input type="text" name="apellido2" value="<?php echo $row["apellido2"] ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Correo electrónico</td>
+                    <td><input type="text" name="email" value="<?php echo $row["email"] ?>"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" name="submit" value="Enviar"></td>
+                </tr>
+            </table>
+            <input type="hidden" name="username" value="<?php echo $username ?>"/>
+        </form>
+        <?php
+        } else {
+            header("Location: http://172.20.111.3/php/login/valida.html");
+            exit();
+        }
+        ?>
+    </body>
+</html>
