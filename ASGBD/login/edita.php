@@ -52,7 +52,7 @@
                     <td><input type="text" name="email" value="<?php echo $row["email"] ?>"/></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" name="submit" value="Enviar"></td>
+                    <td colspan="2"><input type="submit" name="submit" value="Guardar"></td>
                 </tr>
             </table>
             <input type="hidden" name="username" value="<?php echo $username ?>"/>
@@ -60,8 +60,9 @@
         <?php
         } else {
             header("Location: http://172.20.111.3/php/login/valida.html");
-            exit();
         }
+        $resultado->free();
+        $conexion->close();
         ?>
     </body>
 </html>
