@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Resultado</title>
     </head>
     <body>
         <?php
@@ -15,7 +15,7 @@
         
         $conexion->set_charset("utf8");
         
-        $nif=$conexion->real_escape_string($_POST["username"]);
+        $nif=$conexion->real_escape_string($_POST["nif"]);
         $nombre=$conexion->real_escape_string($_POST["nombre"]);
         $apellido1=$conexion->real_escape_string($_POST["apellido1"]);
         $apellido2=$conexion->real_escape_string($_POST["apellido2"]);
@@ -27,11 +27,16 @@
                 . "`nombre`='".$nombre."', "
                 . "`apellido1`='".$apellido1."', "
                 . "`apellido2`='".$apellido2."', "
-                . "`email='".$email."' "
+                . "`email`='".$email."' "
                 . "WHERE `username`='".$username."';";
         
         echo $sql;
         
+        if($conexion->query($sql)===TRUE){
+            echo "Los datos han sido modificados correctamente.";
+        } else {
+            die("Ha ocurrido un error: ".$conexion->error);
+        }
         $conexion->close();
         ?>
     </body>

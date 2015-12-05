@@ -21,14 +21,14 @@
 
         $sql = "SELECT * "
                 . "FROM `clientes` "
-                . "WHERE `username`='$username' "
-                . "AND `password`=SHA2('$password',512)";
+                . "WHERE `username`='".$username."' "
+                . "AND `password`=ENCRYPT('".$password."',`password`)";
 
         $resultado=$conexion->query($sql);
         
-        $row=$resultado->fetch_assoc();
-
-        if($resultado->num_rows==1){ ?>
+        if($resultado->num_rows==1){
+            $row=$resultado->fetch_assoc();
+        ?>
         <form action="guardar.php" method="post">
             <table>
                 <tr>
